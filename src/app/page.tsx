@@ -1,10 +1,7 @@
 import { Suspense } from "react";
-import { Header } from "@/components/Header";
 import { LandingContainer } from "@/components/LandingContainer";
 import { JobList } from "@/components/JobList";
 // import { SearchContainer } from "@/components/SearchContainer";
-import { Footer } from "@/components/Footer";
-import { SocialIcons } from "@/components/SocialIcons";
 // import { SubscriptionForm } from "@/components/SubscriptionForm";
 import { JobListSkeleton } from "@/components/JobListSkeleton";
 import { getJobs } from "@/lib/api";
@@ -14,7 +11,6 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
       <div className="min-h-screen">
         <LandingContainer />
         <div id="findjob">
@@ -23,12 +19,9 @@ export default async function Home() {
             <Suspense fallback={<JobListSkeleton />}>
               <JobList initialJobs={jobs} />
             </Suspense>
-            {/* <SubscriptionForm /> */}
           </div>
         </div>
       </div>
-      <SocialIcons />
-      <Footer />
     </>
   );
 }

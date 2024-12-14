@@ -9,7 +9,8 @@ export const LandingContainer = () => {
             AI Jobs • ML Jobs • Data Jobs
           </p>
           <h1 className="md:max-w-3xl text-4xl md:text-6xl lg:text-7xl text-white font-extrabold md:leading-tighter lg:leading-tighter tracking-tight mt-3">
-            The leading job board for AI Jobs, Data Jobs and Machine Learning Jobs
+            The leading job board for AI Jobs, Data Jobs and Machine Learning
+            Jobs
           </h1>
           <h2 className="md:max-w-3xl text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed sm:leading-relaxed md:leading-relaxed mt-4">
             AIMLJobs curates the best remote jobs at leading AI startups.
@@ -17,7 +18,7 @@ export const LandingContainer = () => {
           <div className="flex flex-wrap text-center mt-6 space-y-4 sm:space-y-0 sm:space-x-4">
             <Link
               className="w-full sm:w-auto flex-none text-white font-semibold bg-purple border border-transparent px-5 py-2.5 rounded-md hover:bg-purple-dark hover:border-purple-dark transition-colors"
-              href="/post-job"
+              href="/job/new"
             >
               Post job
             </Link>
@@ -32,4 +33,4 @@ export const LandingContainer = () => {
       </div>
     </div>
   );
-}; 
+};

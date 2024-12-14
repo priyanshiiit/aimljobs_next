@@ -27,7 +27,7 @@ export const Header = () => {
             <div className="block text-center">
               <Link
                 className="block items-center text-md text-base text-white font-medium bg-white bg-opacity-20 hover:bg-opacity-30 border border-transparent pb-1.5 pl-2 pr-2 pt-1 rounded-md transition-colors"
-                href="/post-job"
+                href="/job/new"
               >
                 Post job
               </Link>
@@ -37,4 +37,4 @@ export const Header = () => {
       </div>
     </header>
   );
-}; 
+};
