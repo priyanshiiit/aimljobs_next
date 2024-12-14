@@ -3,19 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --purple: #6366F1;
+  --purple-dark: #4F46E5;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-white;
+}
+
+.bg-purple {
+  background-color: var(--purple);
+}
+
+.hover\:bg-purple-dark:hover {
+  background-color: var(--purple-dark);
+}
+
+.text-purple {
+  color: var(--purple);
+}
+
+.hover\:text-purple:hover {
+  color: var(--purple);
+}
+
+.border-purple {
+  border-color: var(--purple);
 }
