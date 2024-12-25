@@ -116,7 +116,7 @@ export function JobPostForm() {
           },
           body: JSON.stringify({
             ...formData,
-            ImageUrl: imageUrl,
+            LogoURL: imageUrl,
             paypalOrderId: localStorage.getItem("lastPaypalOrderId"),
             featured: true,
           }),
