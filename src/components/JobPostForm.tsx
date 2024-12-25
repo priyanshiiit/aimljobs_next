@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import Image from "next/image";
 
 interface FormData {
   JobTitle: string;
@@ -136,7 +137,9 @@ export function JobPostForm() {
     }
   };
 
+   /* eslint-disable @typescript-eslint/no-explicit-any */
   const handlePayPalApprove = (data: any, actions: any) => {
+     /* eslint-disable @typescript-eslint/no-explicit-any */
     return actions.order.capture().then(async (details: any) => {
       try {
         localStorage.setItem("lastPaypalOrderId", details.id);
@@ -397,9 +400,9 @@ export function JobPostForm() {
             className="hidden"
           />
           {image ? (
-            <img
-              src={URL.createObjectURL(image)}
+            <Image
               alt="Preview"
+              src={URL.createObjectURL(image)}
               className="max-h-32 mx-auto"
             />
           ) : (

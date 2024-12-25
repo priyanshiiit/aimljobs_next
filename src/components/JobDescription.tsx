@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import { Job } from "@/types";
-import { formatTimeAgo } from "@/lib/utils";
 
 interface JobDescriptionProps {
   job: Job;
@@ -36,7 +35,8 @@ export function JobDescription({ job }: JobDescriptionProps) {
           </h1>
           <div className="flex items-center mt-3 md:mt-4">
             <div className="mr-3">
-              <img
+              <Image
+                alt={`${company} logo`}
                 className="bg-white border border-gray-100 h-9 md:h-12 w-9 md:w-12 rounded-full lazyautosizes lazyloaded"
                 height="400"
                 width="400"
@@ -53,26 +53,26 @@ export function JobDescription({ job }: JobDescriptionProps) {
             <ul className="text-gray-600 leading-relaxed mt-2 mb-2">
               {twitter && (
                 <li className="inline-block mr-3 md:mr-2">
-                  <a
+                  <Link
                     className="text-gray-500 hover:text-purple transition-colors"
                     href={twitter}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Twitter
-                  </a>
+                  </Link>
                 </li>
               )}
               {linkedin && (
                 <li className="inline-block mr-3 md:mr-2">
-                  <a
+                  <Link
                     className="text-gray-500 hover:text-purple transition-colors"
                     href={linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     LinkedIn
-                  </a>
+                  </Link>
                 </li>
               )}
             </ul>
@@ -83,7 +83,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
             <div className="lg:col-span-2 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
               <div className="prose">{<Markdown>{description}</Markdown>}</div>
               <div className="mt-14 md:mt-20">
-                <a
+                <Link
                   className="inline-block w-full sm:w-auto text-white font-semibold text-center bg-purple border border-transparent px-10 py-2.5 rounded-md hover:bg-gray-900 transition-colors"
                   href={
                     applyLink.includes("@")
@@ -94,7 +94,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                   rel="noopener noreferrer"
                 >
                   Apply now
-                </a>
+                </Link>
               </div>
             </div>
             <div className="lg:col-start-4 row-start-1 lg:row-start-1">
@@ -179,7 +179,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                     </div>
                   </div> */}
               <div className="hidden lg:block mt-10">
-                <a
+                <Link
                   className="inline-flex items-center text-gray-600 group hover:text-purple transition-colors"
                   href="/"
                 >
@@ -193,7 +193,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                   >
                     {/* Forward Arrow SVG */}
                   </span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
