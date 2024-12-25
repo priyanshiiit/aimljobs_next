@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 interface FormData {
   JobTitle: string;
   Team: string;
-  Address: { Country: string };
+  Address: string;
   Location: string;
   JobType: string;
   JobDescription: string;
@@ -21,40 +23,37 @@ interface FormData {
 
 export function JobPostForm() {
   const [formData, setFormData] = useState<FormData>({
-    JobTitle: '',
-    Team: 'Engineering',
-    Address: { Country: '' },
-    Location: 'Remote',
-    JobType: 'Fulltime',
-    JobDescription: '',
-    Keywords: '',
-    ApplicationURLrecommendedOrEmailAddress2: '',
-    CompanyName: '',
-    CompanyWebsite: '',
-    Twitter: '',
-    Linkedin: '',
-    YourName: '',
-    YourCompanyEmail: '',
-    ImageUrl: '',
+    JobTitle: "",
+    Team: "Engineering",
+    Address: "",
+    Location: "Remote",
+    JobType: "Fulltime",
+    JobDescription: "",
+    Keywords: "",
+    ApplicationURLrecommendedOrEmailAddress2: "",
+    CompanyName: "",
+    CompanyWebsite: "",
+    Twitter: "",
+    Linkedin: "",
+    YourName: "",
+    YourCompanyEmail: "",
+    ImageUrl: "",
   });
-  
+
   const [image, setImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPaid, setIsPaid] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    if (name === 'Country') {
-      setFormData(prev => ({
-        ...prev,
-        Address: { Country: value }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +65,7 @@ export function JobPostForm() {
   const handlePaste = async (event: React.ClipboardEvent) => {
     const items = event.clipboardData?.items;
     for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf('image') !== -1) {
+      if (items[i].type.indexOf("image") !== -1) {
         const blob = items[i].getAsFile();
         if (blob) setImage(blob);
       }
@@ -76,56 +75,78 @@ export function JobPostForm() {
   const uploadImage = async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append('image', file);
-      
+      formData.append("image", file);
+
       const response = await fetch(
         `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_API_KEY}`,
         {
-          method: 'POST',
+          method: "POST",
           body: formData,
         }
       );
 
-      if (!response.ok) throw new Error('Failed to upload image');
-      
+      if (!response.ok) throw new Error("Failed to upload image");
+
       const data = await response.json();
       return data.data.image.url;
     } catch (error) {
-      console.error('Error uploading image:', error);
-      return 'https://i.ibb.co/6bWJH3h/Company-logo.png';
+      console.error("Error uploading image:", error);
+      return "https://i.ibb.co/6bWJH3h/Company-logo.png";
     }
   };
 
   const handleSubmit = async () => {
     if (!isPaid) {
-      alert('Please complete the payment first');
+      alert("Please complete the payment first");
       return;
     }
 
     try {
-      const imageUrl = image ? await uploadImage(image) : 'https://i.ibb.co/6bWJH3h/Company-logo.png';
-      
-      const response = await fetch('https://aimljobs-backend.vercel.app/cognito-forms-webhook', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          ImageUrl: imageUrl,
-        }),
-      });
+      const imageUrl = image
+        ? await uploadImage(image)
+        : "https://i.ibb.co/6bWJH3h/Company-logo.png";
+
+      const response = await fetch(
+        "https://aimljobs-backend.vercel.app/v1/job",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            ImageUrl: imageUrl,
+            paypalOrderId: localStorage.getItem("lastPaypalOrderId"),
+            featured: true,
+          }),
+        }
+      );
 
       if (response.ok) {
-        alert('Job posted successfully!');
-        window.location.href = '/';
+        localStorage.removeItem("lastPaypalOrderId");
+        alert("Job posted successfully!");
+        window.location.href = "/";
       } else {
-        throw new Error('Failed to post job');
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to post job");
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to post job. Please try again.');
+      console.error("Error:", error);
+      alert("Failed to post job. Please try again.");
     }
+  };
+
+  const handlePayPalApprove = (data: any, actions: any) => {
+    return actions.order.capture().then(async (details: any) => {
+      try {
+        localStorage.setItem("lastPaypalOrderId", details.id);
+        setIsPaid(true);
+        console.log("Payment completed. Transaction ID:", details.id);
+      } catch (error) {
+        console.error("Payment error:", error);
+        alert("Payment failed. Please try again or contact support.");
+      }
+    });
   };
 
   return (
@@ -137,7 +158,10 @@ export function JobPostForm() {
 
       {/* Job Title */}
       <div className="p-4">
-        <label htmlFor="JobTitle" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="JobTitle"
+          className="block text-sm font-medium text-gray-700"
+        >
           Job Title *
         </label>
         <input
@@ -153,7 +177,10 @@ export function JobPostForm() {
 
       {/* Team */}
       <div className="p-4">
-        <label htmlFor="Team" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Team"
+          className="block text-sm font-medium text-gray-700"
+        >
           Team *
         </label>
         <select
@@ -177,7 +204,10 @@ export function JobPostForm() {
 
       {/* Location */}
       <div className="p-4">
-        <label htmlFor="Location" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Location"
+          className="block text-sm font-medium text-gray-700"
+        >
           Location Type *
         </label>
         <select
@@ -196,14 +226,17 @@ export function JobPostForm() {
 
       {/* Country */}
       <div className="p-4">
-        <label htmlFor="Country" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Country"
+          className="block text-sm font-medium text-gray-700"
+        >
           Country *
         </label>
         <input
           type="text"
           id="Country"
-          name="Country"
-          value={formData.Address.Country}
+          name="Address"
+          value={formData.Address}
           onChange={handleInputChange}
           className="mt-1 p-2 w-full border rounded-md"
           required
@@ -212,7 +245,10 @@ export function JobPostForm() {
 
       {/* Job Type */}
       <div className="p-4">
-        <label htmlFor="JobType" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="JobType"
+          className="block text-sm font-medium text-gray-700"
+        >
           Job Type *
         </label>
         <select
@@ -232,7 +268,10 @@ export function JobPostForm() {
 
       {/* Keywords/Skills */}
       <div className="p-4">
-        <label htmlFor="Keywords" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Keywords"
+          className="block text-sm font-medium text-gray-700"
+        >
           Keywords/Skills *
         </label>
         <input
@@ -249,7 +288,10 @@ export function JobPostForm() {
 
       {/* Job Description */}
       <div className="col-span-2 p-4">
-        <label htmlFor="JobDescription" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="JobDescription"
+          className="block text-sm font-medium text-gray-700"
+        >
           Job Description *
         </label>
         <textarea
@@ -262,13 +304,24 @@ export function JobPostForm() {
           required
         />
         <p className="mt-2 text-sm text-gray-500">
-          Markdown formatting is supported. <a href="https://markdownlivepreview.com/" target="_blank" rel="noopener noreferrer" className="text-purple hover:text-purple-dark">Preview your markdown here</a>
+          Markdown formatting is supported.{" "}
+          <a
+            href="https://markdownlivepreview.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-purple hover:text-purple-dark"
+          >
+            Preview your markdown here
+          </a>
         </p>
       </div>
 
       {/* Application URL */}
       <div className="col-span-2 p-4">
-        <label htmlFor="ApplicationURLrecommendedOrEmailAddress2" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="ApplicationURLrecommendedOrEmailAddress2"
+          className="block text-sm font-medium text-gray-700"
+        >
           Application URL or Email *
         </label>
         <input
@@ -290,7 +343,10 @@ export function JobPostForm() {
 
       {/* Company Name */}
       <div className="p-4">
-        <label htmlFor="CompanyName" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="CompanyName"
+          className="block text-sm font-medium text-gray-700"
+        >
           Company Name *
         </label>
         <input
@@ -306,7 +362,10 @@ export function JobPostForm() {
 
       {/* Company Website */}
       <div className="p-4">
-        <label htmlFor="CompanyWebsite" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="CompanyWebsite"
+          className="block text-sm font-medium text-gray-700"
+        >
           Company Website *
         </label>
         <input
@@ -325,7 +384,7 @@ export function JobPostForm() {
         <label className="block text-sm font-medium text-gray-700">
           Company Logo
         </label>
-        <div 
+        <div
           className="mt-1 p-4 border-2 border-dashed rounded-md cursor-pointer"
           onClick={() => fileInputRef.current?.click()}
           onPaste={handlePaste}
@@ -353,7 +412,10 @@ export function JobPostForm() {
 
       {/* Social Media */}
       <div className="p-4">
-        <label htmlFor="Twitter" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Twitter"
+          className="block text-sm font-medium text-gray-700"
+        >
           Twitter Handle
         </label>
         <input
@@ -369,7 +431,10 @@ export function JobPostForm() {
 
       {/* LinkedIn */}
       <div className="p-4">
-        <label htmlFor="Linkedin" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="Linkedin"
+          className="block text-sm font-medium text-gray-700"
+        >
           LinkedIn URL
         </label>
         <input
@@ -390,7 +455,10 @@ export function JobPostForm() {
 
       {/* Your Name */}
       <div className="p-4">
-        <label htmlFor="YourName" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="YourName"
+          className="block text-sm font-medium text-gray-700"
+        >
           Your Name *
         </label>
         <input
@@ -406,7 +474,10 @@ export function JobPostForm() {
 
       {/* Your Email */}
       <div className="p-4">
-        <label htmlFor="YourCompanyEmail" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="YourCompanyEmail"
+          className="block text-sm font-medium text-gray-700"
+        >
           Your Company Email *
         </label>
         <input
@@ -433,6 +504,43 @@ export function JobPostForm() {
             <li>Shared on our social media channels</li>
             <li>Access to our AI/ML talent pool</li>
           </ul>
+
+          {!isPaid && (
+            <div className="mt-6">
+              <PayPalScriptProvider
+                options={{
+                  clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
+                  currency: "USD",
+                  intent: "capture",
+                }}
+              >
+                <PayPalButtons
+                  style={{ layout: "horizontal" }}
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      intent: "CAPTURE",
+                      purchase_units: [
+                        {
+                          amount: {
+                            value: "169.00",
+                            currency_code: "USD",
+                          },
+                          description: "Job Posting on AiMLJobs",
+                        },
+                      ],
+                    });
+                  }}
+                  onApprove={handlePayPalApprove}
+                />
+              </PayPalScriptProvider>
+            </div>
+          )}
+
+          {isPaid && (
+            <div className="mt-4 p-3 bg-green-50 text-green-700 rounded-md">
+              ✓ Payment completed successfully
+            </div>
+          )}
         </div>
       </div>
 
@@ -441,15 +549,15 @@ export function JobPostForm() {
         <button
           className={`w-full py-2 px-4 rounded-md ${
             isPaid
-              ? 'bg-purple text-white hover:bg-purple-dark'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? "bg-purple text-white hover:bg-purple-dark"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           onClick={handleSubmit}
           disabled={!isPaid}
         >
-          {isPaid ? 'Submit Job Posting' : 'Complete Payment to Submit'}
+          {isPaid ? "Submit Job Posting" : "Complete Payment to Submit"}
         </button>
       </div>
     </div>
   );
-} 
+}
