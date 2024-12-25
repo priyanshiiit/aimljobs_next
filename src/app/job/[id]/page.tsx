@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import { getJob } from "@/lib/api";
 import { JobDescription } from "@/components/JobDescription";
 
-interface JobPageProps {
-  params: {
-    id: string;
-  };
-}
+type Params = Promise<{ id: string }>;
 
-export async function generateMetadata({ params }: JobPageProps): Promise<Metadata> {
-  const job = await getJob(params.id);
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const job = await getJob(id);
 
   if (!job) {
     return {
@@ -24,8 +25,9 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   };
 }
 
-export default async function JobPage({ params }: JobPageProps) {
-  const job = await getJob(params.id);
+export default async function JobPage({ params }: { params: Params }) {
+  const { id } = await params;
+  const job = await getJob(id);
 
   if (!job) {
     notFound();
