@@ -108,7 +108,7 @@ export function JobPostForm() {
         : "https://i.ibb.co/6bWJH3h/Company-logo.png";
 
       const response = await fetch(
-        "https://aimljobs-backend.vercel.app/v1/job",
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/job`,
         {
           method: "POST",
           headers: {
@@ -137,9 +137,9 @@ export function JobPostForm() {
     }
   };
 
-   /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const handlePayPalApprove = (data: any, actions: any) => {
-     /* eslint-disable @typescript-eslint/no-explicit-any */
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     return actions.order.capture().then(async (details: any) => {
       try {
         localStorage.setItem("lastPaypalOrderId", details.id);
@@ -528,7 +528,7 @@ export function JobPostForm() {
                             value: "169.00",
                             currency_code: "USD",
                           },
-                          description: "Job Posting on AiMLJobs",
+                          description: "Job Posting on AIMLJobs",
                         },
                       ],
                     });
