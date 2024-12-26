@@ -154,11 +154,6 @@ export function JobPostForm() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[60%] mx-auto mb-20">
-      {/* Job Details Section */}
-      <div className="col-span-2 mb-6">
-        <h2 className="text-xl font-semibold mb-4">Job Details</h2>
-      </div>
-
       {/* Job Title */}
       <div className="p-4">
         <label
