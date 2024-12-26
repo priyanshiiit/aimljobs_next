@@ -657,35 +657,33 @@ export function JobPostForm() {
             </p>
 
             {!isPaid && (
-              <div className="mt-6 w-full flex justify-center">
-                <div className="w-full max-w-lg">
-                  <PayPalScriptProvider
-                    options={{
-                      clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
-                      currency: "USD",
-                      intent: "capture",
-                    }}
-                  >
-                    <PayPalButtons
-                      style={{ layout: "horizontal", color: "blue" }}
-                      createOrder={(data, actions) => {
-                        return actions.order.create({
-                          intent: "CAPTURE",
-                          purchase_units: [
-                            {
-                              amount: {
-                                value: "169.00",
-                                currency_code: "USD",
-                              },
-                              description: "Job Posting on AIMLJobs",
+              <div className="mt-6 w-full">
+                <PayPalScriptProvider
+                  options={{
+                    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
+                    currency: "USD",
+                    intent: "capture",
+                  }}
+                >
+                  <PayPalButtons
+                    style={{ layout: "horizontal", color: "blue" }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        intent: "CAPTURE",
+                        purchase_units: [
+                          {
+                            amount: {
+                              value: "169.00",
+                              currency_code: "USD",
                             },
-                          ],
-                        });
-                      }}
-                      onApprove={handlePayPalApprove}
-                    />
-                  </PayPalScriptProvider>
-                </div>
+                            description: "Job Posting on AIMLJobs",
+                          },
+                        ],
+                      });
+                    }}
+                    onApprove={handlePayPalApprove}
+                  />
+                </PayPalScriptProvider>
               </div>
             )}
 
