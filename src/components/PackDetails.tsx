@@ -36,7 +36,7 @@ export const PackDetails = () => {
 
           <div className="ml-10 md:ml-20 w-full md:w-5/12 mt-16 md:mt-0">
             <p className="text-lg md:text-2xl text-gray-800 font-bold">
-              What's included
+              What&apos;s included
             </p>
             <ul className="text-gray-600">
               <li className="flex items-start md:items-center text-base md:text-lg leading-snug md:leading-snug py-1 md:py-1.5">
