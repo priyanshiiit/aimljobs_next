@@ -7,7 +7,7 @@ export async function getJobs(): Promise<Job[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/v1/jobs`, {
       next: {
-        revalidate: 300, // Cache for 5 minutes
+        revalidate: 20, // Cache for 20 seconds
       },
     });
 

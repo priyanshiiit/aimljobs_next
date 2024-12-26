@@ -40,7 +40,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                 className="bg-white border border-gray-100 h-9 md:h-12 w-9 md:w-12 rounded-full lazyautosizes lazyloaded"
                 height="400"
                 width="400"
-                src={logoURL}
+                src={logoURL || "https://i.ibb.co/6bWJH3h/Company-logo.png"}
                 sizes="48px"
               />
             </div>

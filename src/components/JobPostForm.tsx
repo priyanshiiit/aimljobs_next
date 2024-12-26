@@ -20,7 +20,7 @@ interface FormData {
   Linkedin: string;
   YourName: string;
   YourCompanyEmail: string;
-  ImageUrl: string;
+  LogoURL: string;
 }
 
 export function JobPostForm() {
@@ -39,7 +39,7 @@ export function JobPostForm() {
     Linkedin: "",
     YourName: "",
     YourCompanyEmail: "",
-    ImageUrl: "",
+    LogoURL: "",
   });
 
   const [image, setImage] = useState<File | null>(null);
