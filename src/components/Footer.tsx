@@ -57,12 +57,6 @@ export const Footer = () => {
             >
               Privacy Policy
             </Link>
-            <Link
-              href="/refund"
-              className="text-purple hover:text-purple-dark transition-colors"
-            >
-              Refund Policy
-            </Link>
           </div>
           <a
             href="https://forms.gle/gxybCdQTxZSdhCRS7"
