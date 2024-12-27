@@ -178,9 +178,6 @@ export function AdminJobPostForm() {
         toast.success(
           "Job posted successfully! It will be live in a few minutes."
         );
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 5000);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to post job");
