@@ -5,6 +5,7 @@ import { JobList } from "@/components/JobList";
 // import { SubscriptionForm } from "@/components/SubscriptionForm";
 import { JobListSkeleton } from "@/components/JobListSkeleton";
 import { getJobs } from "@/lib/api";
+import AIPH_Banner from "@/components/sponsors/AIPH";
 
 export default async function Home() {
   const jobs = await getJobs();
@@ -21,6 +22,7 @@ export default async function Home() {
             </Suspense>
           </div>
         </div>
+        <AIPH_Banner />
       </div>
     </>
   );
