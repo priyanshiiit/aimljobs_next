@@ -162,21 +162,17 @@ export function AdminJobPostForm() {
         ? await uploadImage(image)
         : "https://i.ibb.co/6bWJH3h/Company-logo.png";
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/job`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.ADMIN_SECRET_KEY || "",
-          },
-          body: JSON.stringify({
-            ...formData,
-            LogoURL: imageUrl,
-            featured: isFeatured,
-          }),
-        }
-      );
+      const response = await fetch("/api/admin/job", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          LogoURL: imageUrl,
+          featured: isFeatured,
+        }),
+      });
 
       if (response.ok) {
         toast.success(
@@ -184,7 +180,7 @@ export function AdminJobPostForm() {
         );
         setTimeout(() => {
           window.location.href = "/";
-        }, 3000);
+        }, 5000);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to post job");
