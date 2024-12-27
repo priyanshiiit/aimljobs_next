@@ -17,6 +17,7 @@ export interface Job {
   JobType?: string;
   Team?: string;
   ApplicationURLrecommendedOrEmailAddress2: string;
+  Keywords: string[];
 }
 
 export interface SearchFilters {

@@ -46,15 +46,15 @@ export function JobCard({ job }: JobCardProps) {
           </a>
         </h3>
       </div>
-      {/* Categories and Tags */}
+      {/* Keywords */}
       <div className="col-start-1 sm:col-start-2 col-end-2 sm:col-end-4">
         <div className="flex flex-row flex-wrap mt-3 space-x-1 sm:space-x-2">
           <ul className="leading-relaxed sm:leading-normal">
-            {job.Categories.map((category, index) => (
+            {job.Keywords.map((keyword, index) => (
               <li key={index} className="inline">
                 <span className="hover:text-purple transition-colors">
-                  {category}
-                  {index !== job.Categories.length - 1 ? "  •  " : ""}
+                  {keyword}
+                  {index !== job.Keywords.length - 1 ? "  •  " : ""}
                 </span>
               </li>
             ))}
