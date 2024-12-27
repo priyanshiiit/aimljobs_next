@@ -18,7 +18,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
     Address: address,
     JobType: jobType,
     Team: role,
-    Tags: keywords,
+    Keywords: keywords,
     ApplicationURLrecommendedOrEmailAddress2: applyLink,
     Twitter: twitter,
     Linkedin: linkedin,
@@ -145,7 +145,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                   Keywords
                 </h3>
                 <ul className="text-gray-600 leading-relaxed mt-1">
-                  {keywords.map((keyword, index) => (
+                  {keywords?.map((keyword, index) => (
                     <li key={index} className="inline">
                       {index !== 0 && <span aria-hidden="true">,&nbsp;</span>}
                       {index !== keywords.length - 1 ? (
