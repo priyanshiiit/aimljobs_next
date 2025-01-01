@@ -67,7 +67,7 @@ export const Footer = () => {
             Feedback Form
           </a>
           <h1 className="font-medium mt-2">Support: aimljobhub@gmail.com</h1>
-          <p className="mt-2">&copy; 2024 aimljobs.fyi All rights reserved.</p>
+          <p className="mt-2">&copy; 2025 aimljobs.fyi All rights reserved.</p>
         </div>
       </div>
     </footer>
