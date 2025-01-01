@@ -47,3 +47,14 @@ export async function getJob(id: string): Promise<Job | null> {
     return null;
   }
 }
+
+export async function fetchScheduledJobs() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/v1/scheduled-jobs`);
+    if (!response.ok) throw new Error("Failed to fetch scheduled jobs");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching scheduled jobs:", error);
+    throw error;
+  }
+}

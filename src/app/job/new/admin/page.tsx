@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { AdminJobPostForm } from "./_components/AdminJobPostForm";
+import { ScheduledJobs } from "./_components/ScheduledJobs";
 
 export default function NewJobPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [refreshTrigger] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +79,7 @@ export default function NewJobPage() {
   return (
     <div className="lg:max-w-5xl mx-auto mt-16 md:mt-24 md:px-6 xl:px-0">
       <AdminJobPostForm />
+      <ScheduledJobs refreshTrigger={refreshTrigger} />
     </div>
   );
 }
