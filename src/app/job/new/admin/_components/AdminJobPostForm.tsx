@@ -20,6 +20,7 @@ interface FormData {
   YourName: string;
   YourCompanyEmail: string;
   LogoURL: string;
+  Timestamp: string;
 }
 
 export function AdminJobPostForm() {
@@ -39,6 +40,7 @@ export function AdminJobPostForm() {
     YourName: "",
     YourCompanyEmail: "",
     LogoURL: "",
+    Timestamp: new Date().toISOString().slice(0, 16),
   });
 
   const [image, setImage] = useState<File | null>(null);
@@ -636,6 +638,29 @@ export function AdminJobPostForm() {
               Featured Job (appears at the top of listings)
             </label>
           </div>
+        </div>
+
+        {/* Scheduled Post Date/Time */}
+        <div className="col-span-full md:col-span-1">
+          <label
+            htmlFor="Timestamp"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Schedule Post
+          </label>
+          <input
+            type="datetime-local"
+            id="Timestamp"
+            name="Timestamp"
+            value={formData.Timestamp}
+            onChange={handleInputChange}
+            min={new Date().toISOString().slice(0, 16)}
+            className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-purple focus:border-purple border-gray-300"
+          />
+          <p className="mt-1 text-sm text-gray-500">
+            Leave as is to post immediately, or select a future date/time to
+            schedule
+          </p>
         </div>
 
         {/* Submit Button */}
