@@ -247,11 +247,10 @@ export function AdminJobPostForm() {
             data-error={errors.Team ? "true" : undefined}
           >
             <option value="Engineering">Engineering</option>
-            <option value="Data Science">Data Science</option>
-            <option value="Machine Learning">Machine Learning</option>
             <option value="Research">Research</option>
             <option value="Operations">Operations</option>
             <option value="Marketing">Marketing</option>
+            <option value="Design">Design</option>
             <option value="Sales">Sales</option>
             <option value="Other">Other</option>
           </select>
