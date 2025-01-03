@@ -9,6 +9,15 @@ export interface Job {
   Timestamp: string | null;
   featured: boolean;
   ApplicationURLrecommendedOrEmailAddress2: string;
+  CompanyWebsite: string;
+  CompanyDescription: string;
+  Keywords: string[];
+  Categories: string[];
+  Tags: string[];
+  Address: string;
+  Twitter: string;
+  Linkedin: string;
+  JobDescription: string;
 }
 
 export interface SearchFilters {

@@ -8,7 +8,7 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
-  const timeAgo = formatTimeAgo(new Date(job.Timestamp));
+  const timeAgo = formatTimeAgo(new Date(job.Timestamp || ""));
 
   return (
     <div
