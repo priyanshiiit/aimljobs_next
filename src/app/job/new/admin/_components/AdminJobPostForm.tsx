@@ -20,7 +20,7 @@ interface FormData {
   YourName: string;
   YourCompanyEmail: string;
   LogoURL: string;
-  Timestamp: string;
+  Timestamp: string | null;
 }
 
 export function AdminJobPostForm() {
@@ -40,7 +40,7 @@ export function AdminJobPostForm() {
     YourName: "",
     YourCompanyEmail: "",
     LogoURL: "",
-    Timestamp: new Date().toISOString().slice(0, 16),
+    Timestamp: null,
   });
 
   const [image, setImage] = useState<File | null>(null);
@@ -50,6 +50,7 @@ export function AdminJobPostForm() {
     {}
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -620,47 +621,76 @@ export function AdminJobPostForm() {
           )}
         </div>
 
-        {/* Featured Job Toggle */}
+        {/* Featured Job and Schedule Controls */}
         <div className="col-span-full mt-8">
-          <div className="flex items-center">
+          {/* Featured Job Toggle */}
+          <div className="flex items-center mb-4">
             <input
               type="checkbox"
               id="featured"
               checked={isFeatured}
               onChange={(e) => setIsFeatured(e.target.checked)}
-              className="h-4 w-4 text-purple focus:ring-purple border-gray-300 rounded"
+              className="h-5 w-5 text-purple focus:ring-purple border-gray-300 rounded"
             />
             <label
               htmlFor="featured"
-              className="ml-2 block text-sm text-gray-900"
+              className="ml-3 block text-base font-medium text-gray-900"
             >
               Featured Job (appears at the top of listings)
             </label>
           </div>
+
+          {/* Schedule Post Toggle */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="schedulePost"
+              checked={showSchedule}
+              onChange={(e) => {
+                setShowSchedule(e.target.checked);
+                if (!e.target.checked) {
+                  setFormData((prev) => ({ ...prev, Timestamp: null }));
+                } else {
+                  setFormData((prev) => ({
+                    ...prev,
+                    Timestamp: new Date().toISOString().slice(0, 16),
+                  }));
+                }
+              }}
+              className="h-5 w-5 text-purple focus:ring-purple border-gray-300 rounded"
+            />
+            <label
+              htmlFor="schedulePost"
+              className="ml-3 block text-base font-medium text-gray-900"
+            >
+              Schedule for later
+            </label>
+          </div>
         </div>
 
-        {/* Scheduled Post Date/Time */}
-        <div className="col-span-full md:col-span-1">
-          <label
-            htmlFor="Timestamp"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Schedule Post
-          </label>
-          <input
-            type="datetime-local"
-            id="Timestamp"
-            name="Timestamp"
-            value={formData.Timestamp}
-            onChange={handleInputChange}
-            min={new Date().toISOString().slice(0, 16)}
-            className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-purple focus:border-purple border-gray-300"
-          />
-          <p className="mt-1 text-sm text-gray-500">
-            Leave as is to post immediately, or select a future date/time to
-            schedule
-          </p>
-        </div>
+        {/* Scheduled Post Date/Time - Only show if showSchedule is true */}
+        {showSchedule && (
+          <div className="col-span-full md:col-span-1">
+            <label
+              htmlFor="Timestamp"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Schedule Post
+            </label>
+            <input
+              type="datetime-local"
+              id="Timestamp"
+              name="Timestamp"
+              value={formData.Timestamp || ""}
+              onChange={handleInputChange}
+              min={new Date().toISOString().slice(0, 16)}
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-purple focus:border-purple border-gray-300"
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Select a future date/time to schedule the post
+            </p>
+          </div>
+        )}
 
         {/* Submit Button */}
         <div className="col-span-full mt-8 flex justify-center">

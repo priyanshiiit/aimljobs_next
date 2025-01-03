@@ -2,22 +2,13 @@ export interface Job {
   _id: string;
   JobTitle: string;
   CompanyName: string;
-  CompanyWebsite: string;
+  Location: string;
+  JobType: string;
+  Team: string;
   LogoURL: string;
-  Categories: string[];
-  Tags: string[];
-  Timestamp: string;
-  JobDescription: string;
-  applyLink: string;
+  Timestamp: string | null;
   featured: boolean;
-  Twitter?: string;
-  Linkedin?: string;
-  location?: string;
-  Address?: string;
-  JobType?: string;
-  Team?: string;
   ApplicationURLrecommendedOrEmailAddress2: string;
-  Keywords: string[];
 }
 
 export interface SearchFilters {

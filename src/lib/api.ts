@@ -21,7 +21,9 @@ export async function getJobs(): Promise<Job[]> {
     return jobs.sort((a: Job, b: Job) => {
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;
-      return new Date(b.Timestamp).getTime() - new Date(a.Timestamp).getTime();
+      return (
+        new Date(b.Timestamp!).getTime() - new Date(a.Timestamp!).getTime()
+      );
     });
   } catch (error) {
     console.error("Error fetching jobs:", error);
@@ -48,13 +50,53 @@ export async function getJob(id: string): Promise<Job | null> {
   }
 }
 
-export async function fetchScheduledJobs() {
+export async function fetchUnlistedJobs(): Promise<Job[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/v1/scheduled-jobs`);
-    if (!response.ok) throw new Error("Failed to fetch scheduled jobs");
-    return await response.json();
+    const [scheduledResponse, unscheduledResponse] = await Promise.all([
+      fetch(`${API_BASE_URL}/v1/jobs/scheduled`),
+      fetch(`${API_BASE_URL}/v1/jobs/unscheduled`),
+    ]);
+
+    if (!scheduledResponse.ok || !unscheduledResponse.ok) {
+      throw new Error("Failed to fetch unlisted jobs");
+    }
+
+    const [scheduledJobs, unscheduledJobs] = await Promise.all([
+      scheduledResponse.json(),
+      unscheduledResponse.json(),
+    ]);
+
+    return [...unscheduledJobs, ...scheduledJobs];
   } catch (error) {
-    console.error("Error fetching scheduled jobs:", error);
-    throw error;
+    console.error("Error fetching unlisted jobs:", error);
+    return [];
   }
+}
+
+export async function updateJobSchedule(jobId: string, timestamp: string) {
+  const response = await fetch(`${API_BASE_URL}/v1/jobs/${jobId}/schedule`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ timestamp }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update job schedule");
+  }
+
+  return response.json();
+}
+
+export async function deleteJob(jobId: string) {
+  const response = await fetch(`${API_BASE_URL}/v1/jobs/${jobId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete job");
+  }
+
+  return response.json();
 }
