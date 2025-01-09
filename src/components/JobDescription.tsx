@@ -28,7 +28,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
 
   return (
     <>
-      <div className="lg:max-w-6xl mx-auto px-4 sm:px-6 xl:px-0">
+      <div className="lg:max-w-7xl mx-auto px-4 sm:px-6 xl:px-0">
         <div className="pt-12 md:pt-32">
           <h1 className="text-4xl md:text-6xl lg:text-7xl text-gray-900 font-extrabold md:leading-tighter lg:leading-tighter tracking-tight break-words md:break-normal mt-6 md:mt-7">
             {title}
@@ -78,10 +78,12 @@ export function JobDescription({ job }: JobDescriptionProps) {
             </ul>
           </div>
         </div>
-        <div className="pb-20 md:py-10 lg:py-10">
-          <div className="lg:max-w-5xl grid lg:grid-cols-4">
-            <div className="lg:col-span-2 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
-              <div className="prose">{<Markdown>{description}</Markdown>}</div>
+        <div className="pb-15 md:py-10 lg:py-10">
+          <div className="lg:max-w-full grid lg:grid-cols-5 gap-8">
+            <div className="lg:col-span-3 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
+              <div className="prose max-w-none">
+                {<Markdown>{description}</Markdown>}
+              </div>
               <div className="mt-14 md:mt-20">
                 <Link
                   className="inline-block w-full sm:w-auto text-white font-semibold text-center bg-purple border border-transparent px-10 py-2.5 rounded-md hover:bg-gray-900 transition-colors"
@@ -97,7 +99,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
                 </Link>
               </div>
             </div>
-            <div className="lg:col-start-4 row-start-1 lg:row-start-1">
+            <div className="mt-5 lg:col-start-5 row-start-1 lg:row-start-1">
               {address && (
                 <div>
                   <h3 className="text-xs text-gray-500 font-medium tracking-wide uppercase">
@@ -140,45 +142,44 @@ export function JobDescription({ job }: JobDescriptionProps) {
                   </span>
                 </div>
               </div>
-              <div className="mt-6">
-                <h3 className="text-xs text-gray-500 font-medium tracking-wide uppercase">
-                  Keywords
-                </h3>
-                <ul className="text-gray-600 leading-relaxed mt-1">
-                  {keywords?.map((keyword, index) => (
-                    <li key={index} className="inline">
-                      {index !== 0 && <span aria-hidden="true">,&nbsp;</span>}
-                      {index !== keywords.length - 1 ? (
-                        <span className="hover:text-purple transition-colors">
-                          {keyword}
-                        </span>
-                      ) : (
-                        <span className="hover:text-purple transition-colors">
-                          {keyword}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+              {keywords.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-xs text-gray-500 font-medium tracking-wide uppercase">
+                    Keywords
+                  </h3>
+                  <ul className="text-gray-600 leading-relaxed mt-1">
+                    {keywords?.map((keyword, index) => (
+                      <li key={index} className="inline">
+                        {index !== 0 && <span aria-hidden="true">,&nbsp;</span>}
+                        {index !== keywords.length - 1 ? (
+                          <span className="hover:text-purple transition-colors">
+                            {keyword}
+                          </span>
+                        ) : (
+                          <span className="hover:text-purple transition-colors">
+                            {keyword}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="mt-7 md:mt-10">
+                <Link
+                  className="inline-block w-full sm:w-auto text-white font-semibold text-center bg-purple border border-transparent px-10 py-2.5 rounded-md hover:bg-gray-900 transition-colors"
+                  href={
+                    applyLink.includes("@")
+                      ? `mailto:${applyLink}`
+                      : applyLink + refDetails
+                  }
+                  target={applyLink.includes("@") ? "_self" : "_blank"}
+                  rel="noopener noreferrer"
+                >
+                  Apply now
+                </Link>
               </div>
-            </div>
-            <div className="lg:col-start-4 row-start-3 lg:row-start-2">
-              {/* <div className="mt-14 sm:mt-6">
-                    <h3 className="text-xs text-gray-500 font-medium tracking-wide uppercase">
-                      About {company}
-                    </h3>
-                    <div className="text-gray-600 mt-1">
-                      <p>
-                        <a
-                          className="hover:text-purple transition-colors"
-                          href={aboutCompanyLink}
-                        >
-                          Company profile
-                        </a>
-                      </p>
-                    </div>
-                  </div> */}
-              <div className="hidden lg:block mt-10">
+              <div className="mt-7 lg:block">
                 <Link
                   className="inline-flex items-center text-gray-600 group hover:text-purple transition-colors"
                   href="/"
