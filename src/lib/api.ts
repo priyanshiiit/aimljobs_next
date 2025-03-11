@@ -101,7 +101,10 @@ export async function deleteJob(jobId: string) {
   return response.json();
 }
 
-export async function updateJob(jobId: string, jobData: any) {
+export async function updateJob(
+  jobId: string,
+  jobData: Record<string, unknown>
+) {
   const response = await fetch(`${API_BASE_URL}/v1/job/${jobId}`, {
     method: "PUT",
     headers: {

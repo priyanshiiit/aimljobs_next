@@ -26,7 +26,7 @@ interface FormData {
 
 interface AdminJobPostFormProps {
   initialData?: Job;
-  onSubmit?: (formData: any) => Promise<void>;
+  onSubmit?: (formData: Record<string, unknown>) => Promise<void>;
   isEditing?: boolean;
 }
 

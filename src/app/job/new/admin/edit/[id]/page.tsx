@@ -51,7 +51,7 @@ export default function EditJobPage({ params }: EditJobPageProps) {
     loadJob();
   }, [jobId]);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: Record<string, unknown>) => {
     if (!jobId) return;
 
     try {
