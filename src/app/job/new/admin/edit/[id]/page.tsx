@@ -55,7 +55,7 @@ export default function EditJobPage({ params }: EditJobPageProps) {
     if (!jobId) return;
 
     try {
-      await updateJob(jobId as string, formData);
+      await updateJob(jobId, formData);
       toast.success("Job updated successfully");
     } catch (error) {
       console.error("Error updating job:", error);

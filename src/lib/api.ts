@@ -1,3 +1,5 @@
+"use server";
+
 import { Job } from "@/types";
 
 const API_BASE_URL =
