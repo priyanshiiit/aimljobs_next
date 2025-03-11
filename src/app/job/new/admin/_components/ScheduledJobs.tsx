@@ -9,6 +9,7 @@ import Link from "next/link";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Job } from "@/types";
+import { FaRegEdit } from "react-icons/fa";
 
 interface ScheduledJobsProps {
   refreshTrigger: number;
@@ -153,14 +154,24 @@ function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
             </h3>
             <p className="text-gray-600">{job.CompanyName}</p>
           </div>
-          <Link
-            href={job.ApplicationURLrecommendedOrEmailAddress2}
-            className="text-purple hover:text-purple-700"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FiArrowUpRight size={20} />
-          </Link>
+          <div className="flex space-x-2">
+            <Link
+              href={`/job/new/admin/edit/${job._id}`}
+              className="text-blue-600 hover:text-blue-800"
+              title="Edit job"
+              target="_blank"
+            >
+              <FaRegEdit size={20} />
+            </Link>
+            <Link
+              href={job.ApplicationURLrecommendedOrEmailAddress2}
+              className="text-purple hover:text-purple-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FiArrowUpRight size={20} />
+            </Link>
+          </div>
         </div>
 
         <div className="mt-4 space-y-4">

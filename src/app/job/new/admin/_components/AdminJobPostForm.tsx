@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef, FormEvent, useEffect } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { Job } from "@/types";
 
 interface FormData {
   JobTitle: string;
@@ -23,7 +24,17 @@ interface FormData {
   Timestamp: string | null;
 }
 
-export function AdminJobPostForm() {
+interface AdminJobPostFormProps {
+  initialData?: Job;
+  onSubmit?: (formData: any) => Promise<void>;
+  isEditing?: boolean;
+}
+
+export function AdminJobPostForm({
+  initialData,
+  onSubmit,
+  isEditing = false,
+}: AdminJobPostFormProps) {
   const [formData, setFormData] = useState<FormData>({
     JobTitle: "",
     Team: "Engineering",
@@ -44,6 +55,7 @@ export function AdminJobPostForm() {
   });
 
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isFeatured, setIsFeatured] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
@@ -51,6 +63,64 @@ export function AdminJobPostForm() {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Initialize form with existing job data if provided
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        JobTitle: initialData.JobTitle || "",
+        Team: initialData.Team || "Engineering",
+        Address: initialData.Address || "",
+        Location: initialData.Location || "Remote",
+        JobType: initialData.JobType || "Fulltime",
+        JobDescription: initialData.JobDescription || "",
+        // Convert array to comma-separated string if needed
+        Keywords: Array.isArray(initialData.Keywords)
+          ? initialData.Keywords.join(", ")
+          : initialData.Keywords || "",
+        ApplicationURLrecommendedOrEmailAddress2:
+          initialData.ApplicationURLrecommendedOrEmailAddress2 || "",
+        CompanyName: initialData.CompanyName || "",
+        CompanyWebsite: initialData.CompanyWebsite || "",
+        Twitter: initialData.Twitter || "",
+        Linkedin: initialData.Linkedin || "",
+        // These fields might not be in the Job type, so use empty strings as fallbacks
+        YourName: initialData.YourName || "",
+        YourCompanyEmail: initialData.YourCompanyEmail || "",
+        LogoURL: initialData.LogoURL || "",
+        Timestamp: initialData.Timestamp || null,
+      });
+
+      if (initialData.LogoURL) {
+        setImagePreviewUrl(initialData.LogoURL);
+      }
+
+      if (initialData.featured) {
+        setIsFeatured(initialData.featured);
+      }
+
+      if (initialData.Timestamp) {
+        setShowSchedule(true);
+      }
+    }
+  }, [initialData]);
+
+  // Warn user before leaving page with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasChanges && !isSubmitting) {
+        e.preventDefault();
+        e.returnValue = "";
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasChanges, isSubmitting]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -62,11 +132,15 @@ export function AdminJobPostForm() {
       ...prev,
       [name]: value,
     }));
+    setHasChanges(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImage(file);
+      setImagePreviewUrl(URL.createObjectURL(file));
+      setHasChanges(true);
     }
   };
 
@@ -75,7 +149,11 @@ export function AdminJobPostForm() {
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf("image") !== -1) {
         const blob = items[i].getAsFile();
-        if (blob) setImage(blob);
+        if (blob) {
+          setImage(blob);
+          setImagePreviewUrl(URL.createObjectURL(blob));
+          setHasChanges(true);
+        }
       }
     }
   };
@@ -161,33 +239,68 @@ export function AdminJobPostForm() {
     setIsSubmitting(true);
 
     try {
-      const imageUrl = image
-        ? await uploadImage(image)
-        : "https://i.ibb.co/6bWJH3h/Company-logo.png";
+      // Prepare form data with Keywords as array
+      const preparedFormData = {
+        ...formData,
+        // Convert comma-separated Keywords to array
+        Keywords: formData.Keywords.split(",")
+          .map((keyword) => keyword.trim())
+          .filter(Boolean),
+      };
 
-      const response = await fetch("/api/admin/job", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
+      // If we have a custom onSubmit handler (for editing), use it
+      if (onSubmit) {
+        // Prepare the data for submission
+        let imageUrl = formData.LogoURL;
+
+        // Only upload a new image if one was selected
+        if (image) {
+          imageUrl = await uploadImage(image);
+        }
+
+        // Call the provided onSubmit function with the form data
+        await onSubmit({
+          ...preparedFormData,
           LogoURL: imageUrl,
           featured: isFeatured,
-        }),
-      });
-
-      if (response.ok) {
-        toast.success(
-          "Job posted successfully! It will be live in a few minutes."
-        );
+        });
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to post job");
+        // Default behavior for creating a new job
+        const imageUrl = image
+          ? await uploadImage(image)
+          : "https://i.ibb.co/6bWJH3h/Company-logo.png";
+
+        const response = await fetch("/api/admin/job", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            LogoURL: imageUrl,
+            featured: isFeatured,
+          }),
+        });
+
+        if (response.ok) {
+          toast.success(
+            "Job posted successfully! It will be live in a few minutes."
+          );
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to post job");
+        }
       }
+
+      // Reset the hasChanges flag after successful submission
+      setHasChanges(false);
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to post job. Please try again.");
+      toast.error(
+        isEditing
+          ? "Failed to update job. Please try again."
+          : "Failed to post job. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -502,11 +615,21 @@ export function AdminJobPostForm() {
               accept="image/*"
               className="hidden"
             />
-            {image ? (
+            {imagePreviewUrl ? (
+              <Image
+                alt="Preview"
+                src={imagePreviewUrl}
+                width={128}
+                height={128}
+                className="max-h-32 mx-auto object-contain"
+              />
+            ) : image ? (
               <Image
                 alt="Preview"
                 src={URL.createObjectURL(image)}
-                className="max-h-32 mx-auto"
+                width={128}
+                height={128}
+                className="max-h-32 mx-auto object-contain"
               />
             ) : (
               <p className="text-center text-gray-500">
@@ -629,7 +752,10 @@ export function AdminJobPostForm() {
               type="checkbox"
               id="featured"
               checked={isFeatured}
-              onChange={(e) => setIsFeatured(e.target.checked)}
+              onChange={(e) => {
+                setIsFeatured(e.target.checked);
+                setHasChanges(true);
+              }}
               className="h-5 w-5 text-purple focus:ring-purple border-gray-300 rounded"
             />
             <label
@@ -648,6 +774,7 @@ export function AdminJobPostForm() {
               checked={showSchedule}
               onChange={(e) => {
                 setShowSchedule(e.target.checked);
+                setHasChanges(true);
                 if (!e.target.checked) {
                   setFormData((prev) => ({ ...prev, Timestamp: null }));
                 } else {
@@ -721,8 +848,10 @@ export function AdminJobPostForm() {
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                <span>Submitting...</span>
+                <span>{isEditing ? "Updating..." : "Submitting..."}</span>
               </>
+            ) : isEditing ? (
+              "Update Job Posting"
             ) : (
               "Submit Job Posting"
             )}

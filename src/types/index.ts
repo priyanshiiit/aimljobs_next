@@ -18,6 +18,8 @@ export interface Job {
   Twitter: string;
   Linkedin: string;
   JobDescription: string;
+  YourName?: string;
+  YourCompanyEmail?: string;
 }
 
 export interface SearchFilters {

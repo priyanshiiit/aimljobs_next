@@ -100,3 +100,21 @@ export async function deleteJob(jobId: string) {
 
   return response.json();
 }
+
+export async function updateJob(jobId: string, jobData: any) {
+  const response = await fetch(`${API_BASE_URL}/v1/job/${jobId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.ADMIN_SECRET_KEY || "",
+    },
+    body: JSON.stringify(jobData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to update job");
+  }
+
+  return response.json();
+}
