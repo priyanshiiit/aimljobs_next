@@ -231,7 +231,7 @@ export const SubscriptionDialog = () => {
         </div>
 
         <p className="text-sm sm:text-base text-gray-600 mb-4">
-          Every Saturday we\'ll send the latest jobs directly to your inbox.
+          Every Saturday we&apos;ll send the latest jobs directly to your inbox.
         </p>
 
         <form onSubmit={handleSubmit}>
