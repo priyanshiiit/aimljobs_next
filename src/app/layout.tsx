@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SubscriptionDialog } from "@/components/SubscriptionDialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
         <Toaster position="top-center" />
         {children}
         <Footer />
+        <SubscriptionDialog />
         <Analytics />
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-HHKPZ9HPZW" />
         <SpeedInsights />

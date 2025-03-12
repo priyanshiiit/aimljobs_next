@@ -123,3 +123,30 @@ export async function updateJob(
 
   return response.json();
 }
+
+/**
+ * Subscribe an email to the newsletter (server action)
+ * @param email - The email address to subscribe
+ * @returns A promise that resolves to the subscription result
+ */
+export async function subscribeToNewsletter(email: string) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/subscribe`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || "Failed to subscribe");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error subscribing to newsletter:", error);
+    throw error;
+  }
+}
