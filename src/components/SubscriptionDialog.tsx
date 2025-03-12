@@ -2,19 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import { IoMdClose } from "react-icons/io";
-import toast from "react-hot-toast";
-import { subscribeToNewsletter } from "@/lib/api";
+import { SubscriptionForm } from "./SubscriptionForm";
 
 // How often to show the dialog (in days)
 const DIALOG_FREQUENCY_DAYS = 4;
 
 export const SubscriptionDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isScrollListenerActive, setIsScrollListenerActive] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
-  const emailInputRef = useRef<HTMLInputElement>(null);
 
   // Activate scroll listener after a delay
   useEffect(() => {
@@ -99,15 +95,6 @@ export const SubscriptionDialog = () => {
     };
   }, [isScrollListenerActive, isOpen]);
 
-  // Focus email input when dialog opens
-  useEffect(() => {
-    if (isOpen && emailInputRef.current) {
-      setTimeout(() => {
-        emailInputRef.current?.focus();
-      }, 100);
-    }
-  }, [isOpen]);
-
   // Handle escape key to close dialog
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
@@ -175,32 +162,6 @@ export const SubscriptionDialog = () => {
     sessionStorage.setItem("hasDismissedSubscription", "true");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !email.includes("@")) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      await subscribeToNewsletter(email);
-      localStorage.setItem("hasSubscribed", "true");
-      setIsOpen(false);
-      toast.success("Thanks for subscribing!");
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An error occurred. Please try again later.");
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -231,34 +192,15 @@ export const SubscriptionDialog = () => {
         </div>
 
         <p className="text-sm sm:text-base text-gray-600 mb-4">
-          Every Saturday we&apos;ll send the latest jobs directly to your inbox.
+          Every Saturday we&apos;ll send the latest jobs directly to your inbox!
         </p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email"
-              ref={emailInputRef}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-purple hover:bg-purple-dark text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple"
-          >
-            {isSubmitting ? "Subscribing..." : "Subscribe"}
-          </button>
-        </form>
+        <SubscriptionForm
+          inputId="dialog-email"
+          onSuccess={() => setIsOpen(false)}
+          autoFocus={true}
+          showSuccessMessage={false}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { SubscriptionForm } from "./SubscriptionForm";
 
 export const SocialIcons = () => {
   const socialLinks = [
@@ -41,9 +42,15 @@ export const SocialIcons = () => {
 export const Footer = () => {
   return (
     <footer className="w-full text-gray-10 mt-2">
-      <SocialIcons />
-      <div className="container mx-auto py-8 px-4">
-        <div className="text-center">
+      <div className="container mx-auto pt-8 px-4">
+        <SubscriptionForm
+          className="max-w-md mx-auto mb-8"
+          inputId="footer-email"
+          title="Subscribe to our newsletter"
+          description="Get the latest jobs in your inbox every Saturday."
+        />
+        <SocialIcons />
+        <div className="text-center mt-2">
           <div className="flex justify-center space-x-4 mb-4">
             <Link
               href="/terms"
