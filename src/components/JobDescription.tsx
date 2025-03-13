@@ -28,7 +28,7 @@ export function JobDescription({ job }: JobDescriptionProps) {
 
   return (
     <>
-      <div className="lg:max-w-7xl mx-auto px-4 sm:px-6 xl:px-0">
+      <div className="lg:max-w-5xl mx-auto px-4 sm:px-6 xl:px-0">
         <div className="pt-12 md:pt-32">
           <h1 className="text-4xl md:text-6xl lg:text-7xl text-gray-900 font-extrabold md:leading-tighter lg:leading-tighter tracking-tight break-words md:break-normal mt-6 md:mt-7">
             {title}
@@ -79,8 +79,8 @@ export function JobDescription({ job }: JobDescriptionProps) {
           </div>
         </div>
         <div className="pb-15 md:py-10 lg:py-10">
-          <div className="lg:max-w-full grid lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-3 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
+          <div className="lg:max-w-full grid lg:grid-cols-5 gap-10">
+            <div className="lg:col-span-4 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
               <div className="prose max-w-none">
                 {<Markdown>{description}</Markdown>}
               </div>

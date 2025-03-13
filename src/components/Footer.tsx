@@ -41,8 +41,8 @@ export const SocialIcons = () => {
 
 export const Footer = () => {
   return (
-    <footer className="w-full text-gray-10 mt-2">
-      <div className="container mx-auto pt-8 px-4">
+    <footer className="w-full text-gray-10">
+      <div className="container mx-auto px-4">
         <SubscriptionForm
           className="max-w-md mx-auto mb-8"
           inputId="footer-email"
