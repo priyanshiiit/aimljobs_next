@@ -20,6 +20,7 @@ export interface Job {
   JobDescription: string;
   YourName?: string;
   YourCompanyEmail?: string;
+  slug?: string;
 }
 
 export interface SearchFilters {

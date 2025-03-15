@@ -28,7 +28,7 @@ export function JobCard({ job }: JobCardProps) {
         <div className="flex items-center gap-2 mt-2 sm:mt-0">
           <h2 className="text-lg sm:text-xl md:text-2xl text-gray-800 font-bold">
             <Link
-              href={`/job/${job._id}`}
+              href={`/job/${job.slug || job._id}`}
               className="hover:text-purple transition-colors"
             >
               {job.JobTitle}

@@ -10,8 +10,8 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const { id } = await params;
-  const job = await getJob(id);
+  const { id: idOrSlug } = await params;
+  const job = await getJob(idOrSlug);
 
   if (!job) {
     return {
@@ -26,8 +26,8 @@ export async function generateMetadata({
 }
 
 export default async function JobPage({ params }: { params: Params }) {
-  const { id } = await params;
-  const job = await getJob(id);
+  const { id: idOrSlug } = await params;
+  const job = await getJob(idOrSlug);
 
   if (!job) {
     notFound();

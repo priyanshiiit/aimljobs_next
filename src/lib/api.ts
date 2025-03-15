@@ -33,9 +33,9 @@ export async function getJobs(): Promise<Job[]> {
   }
 }
 
-export async function getJob(id: string): Promise<Job | null> {
+export async function getJob(idOrSlug: string): Promise<Job | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/v1/job/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/v1/job/${idOrSlug}`, {
       next: {
         revalidate: 300, // Cache for 5 minutes
       },
