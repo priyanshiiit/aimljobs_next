@@ -44,7 +44,7 @@ export const Footer = () => {
     <footer className="w-full text-gray-10">
       <div className="container mx-auto px-4">
         <SubscriptionForm
-          className="max-w-md mx-auto mb-8"
+          className="max-w-md mx-auto mb-8 mt-20 md:mt-0"
           inputId="footer-email"
           title="Subscribe to our newsletter"
           description="Get the latest jobs in your inbox every Saturday."
