@@ -152,7 +152,12 @@ function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
             <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
               {job.JobTitle}
             </h3>
-            <p className="text-gray-600">{job.CompanyName}</p>
+            <Link
+              href={job.CompanyWebsite}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              {job.CompanyName}
+            </Link>
           </div>
           <div className="flex space-x-2">
             <Link
