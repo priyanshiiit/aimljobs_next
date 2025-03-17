@@ -39,7 +39,7 @@ export default function RootLayout({
         <Footer />
         <SubscriptionDialog />
         <Analytics />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-HHKPZ9HPZW" />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-D6VRBSWCSM" />
         <SpeedInsights />
       </body>
     </html>
