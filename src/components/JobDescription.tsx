@@ -1,10 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import { ReactNode } from "react";
 import { Job } from "@/types";
 
 interface JobDescriptionProps {
   job: Job;
+}
+
+// Define proper types for markdown components
+interface MarkdownHeadingProps {
+  children?: ReactNode;
+  className?: string;
 }
 
 export function JobDescription({ job }: JobDescriptionProps) {
@@ -29,13 +36,13 @@ export function JobDescription({ job }: JobDescriptionProps) {
   // Create a wrapper component to handle proper heading hierarchy in markdown content
   const MarkdownComponents = {
     // Convert all h1 tags in markdown content to h2 to maintain heading hierarchy
-    h1: ({ node, ...props }: any) => (
+    h1: (props: MarkdownHeadingProps) => (
       <h2 className="text-2xl font-bold my-5" {...props} />
     ),
-    h2: ({ node, ...props }: any) => (
+    h2: (props: MarkdownHeadingProps) => (
       <h3 className="text-xl font-bold my-4" {...props} />
     ),
-    h3: ({ node, ...props }: any) => (
+    h3: (props: MarkdownHeadingProps) => (
       <h4 className="text-lg font-bold my-2" {...props} />
     ),
   };
