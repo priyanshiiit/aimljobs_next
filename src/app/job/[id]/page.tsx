@@ -28,7 +28,7 @@ export async function generateMetadata({
     job.CompanyName
   }. ${job.JobType} ${job.Location} opportunity in ${
     job.Team || "AI/ML"
-  } team . ${job.JobDescription?.substring(0, 150)}...`;
+  } team.`;
 
   return {
     title,
