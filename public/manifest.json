@@ -1,6 +1,12 @@
 {
+  "name": "AI/ML Jobs - Find Remote AI and ML Jobs",
   "short_name": "AI/ML Jobs",
-  "name": "AI/ML Jobs at top startups",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +24,5 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
-} 
+  "splash_pages": null
+}

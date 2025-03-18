@@ -26,6 +26,20 @@ export function JobDescription({ job }: JobDescriptionProps) {
     // aboutCompanyLink,
   } = job;
 
+  // Create a wrapper component to handle proper heading hierarchy in markdown content
+  const MarkdownComponents = {
+    // Convert all h1 tags in markdown content to h2 to maintain heading hierarchy
+    h1: ({ node, ...props }: any) => (
+      <h2 className="text-2xl font-bold my-5" {...props} />
+    ),
+    h2: ({ node, ...props }: any) => (
+      <h3 className="text-xl font-bold my-4" {...props} />
+    ),
+    h3: ({ node, ...props }: any) => (
+      <h4 className="text-lg font-bold my-2" {...props} />
+    ),
+  };
+
   return (
     <>
       <div className="lg:max-w-5xl mx-auto px-4 sm:px-6 xl:px-0">
@@ -44,9 +58,9 @@ export function JobDescription({ job }: JobDescriptionProps) {
                 sizes="48px"
               />
             </div>
-            <h2 className="text-xl md:text-3xl text-gray-900 font-medium leading-none sm:leading-none md:leading-none break-words md:break-normal">
+            <p className="text-xl md:text-3xl text-gray-900 font-medium leading-none sm:leading-none md:leading-none break-words md:break-normal">
               {company}
-            </h2>
+            </p>
           </div>
 
           <div className="mt-6">
@@ -82,7 +96,11 @@ export function JobDescription({ job }: JobDescriptionProps) {
           <div className="lg:max-w-full grid lg:grid-cols-5 gap-10">
             <div className="lg:col-span-4 row-start-2 lg:row-span-3 mt-20 lg:mt-0">
               <div className="prose max-w-none">
-                {<Markdown>{description}</Markdown>}
+                {
+                  <Markdown components={MarkdownComponents}>
+                    {description}
+                  </Markdown>
+                }
               </div>
               <div className="mt-14 md:mt-20">
                 <Link
