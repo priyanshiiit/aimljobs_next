@@ -21,7 +21,7 @@ export async function generateMetadata({
 
   return {
     title: `${job.JobTitle} at ${job.CompanyName} | AI/ML Jobs`,
-    description: `Apply for ${job.JobTitle} position at ${job.CompanyName}. Find more AI and ML jobs at top startups.`,
+    description: `Apply for ${job.JobTitle} position at ${job.CompanyName}. Work in top AI startups, and explore the best remote jobs in AI.`,
   };
 }
 

@@ -12,9 +12,9 @@ import { SubscriptionDialog } from "@/components/SubscriptionDialog";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Jobs and ML Jobs at Remote AI Startups",
+  title: "Find Remote AI Jobs at Top AI Startups",
   description:
-    "The leading job board for ai jobs and ml jobs with over 10000 ai jobs posted at over 2000 remote ai startups.",
+    "The leading job board for remote AI jobs with over 10000 AI jobs posted at over 2000 remote AI startups.",
   manifest: "/manifest.json",
   icons: {
     icon: [
