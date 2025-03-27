@@ -15,9 +15,6 @@ interface MarkdownHeadingProps {
 }
 
 export function JobDescription({ job }: JobDescriptionProps) {
-  const refDetails =
-    "?ref=aimljobs.fyi&source=aimljobs.fyi&utm_source=aimljobs.fyi&utm_campaign=aimljobs.fyi";
-
   const {
     JobTitle: title,
     CompanyName: company,
@@ -32,6 +29,10 @@ export function JobDescription({ job }: JobDescriptionProps) {
     LogoURL: logoURL,
     // aboutCompanyLink,
   } = job;
+
+  const refDetails =
+    (applyLink.includes("?") ? "&" : "?") +
+    "ref=aimljobs.fyi&source=aimljobs.fyi&utm_source=aimljobs.fyi&utm_campaign=aimljobs.fyi";
 
   // Create a wrapper component to handle proper heading hierarchy in markdown content
   const MarkdownComponents = {
