@@ -86,7 +86,18 @@ export default function RootLayout({
         <Footer />
         <SubscriptionDialog />
         <Analytics />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-D6VRBSWCSM" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-D6VRBSWCSM"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-D6VRBSWCSM');
+          `}
+        </Script>
         <SpeedInsights />
       </body>
     </html>
