@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/_next/"],
     },
-    sitemap: "https://aimljobs.fyi/sitemap.xml",
+    sitemap: "https://www.aimljobs.fyi/sitemap.xml",
   };
 }

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     "The leading job board for remote AI jobs with over 10000 AI jobs posted at over 2000 remote AI startups.",
   manifest: "/manifest.json",
-  metadataBase: new URL("https://aimljobs.fyi"),
+  metadataBase: new URL("https://www.aimljobs.fyi"),
   alternates: {
     canonical: "/",
   },
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Find Remote AI Jobs at Top AI Startups | AI/ML Jobs",
     description:
       "Discover high-paying remote AI jobs, ML engineering positions, and data science careers at innovative AI startups. AI/ML Jobs is the leading job board with over 10,000 opportunities at 2,000+ companies.",
-    url: "https://aimljobs.fyi",
+    url: "https://www.aimljobs.fyi",
     siteName: "AI/ML Jobs",
     images: [
       {
@@ -64,8 +64,8 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "AI/ML Jobs",
-    url: "https://aimljobs.fyi",
-    logo: "https://aimljobs.fyi/logo512.png",
+    url: "https://www.aimljobs.fyi",
+    logo: "https://www.aimljobs.fyi/logo512.png",
     sameAs: [
       "https://x.com/aimljobs",
       "https://www.linkedin.com/company/ai-ml-data-jobs",

@@ -34,12 +34,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `https://aimljobs.fyi/job/${idOrSlug}`,
+      canonical: `https://www.aimljobs.fyi/job/${idOrSlug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://aimljobs.fyi/job/${idOrSlug}`,
+      url: `https://www.aimljobs.fyi/job/${idOrSlug}`,
       siteName: "AI/ML Jobs",
       images: [
         {
@@ -74,8 +74,8 @@ function JobPostingSchema({ job }: { job: Job }) {
     hiringOrganization: {
       "@type": "Organization",
       name: job.CompanyName,
-      sameAs: job.CompanyWebsite || "https://aimljobs.fyi",
-      logo: job.LogoURL || "https://aimljobs.fyi/logo512.png",
+      sameAs: job.CompanyWebsite || "https://www.aimljobs.fyi",
+      logo: job.LogoURL || "https://www.aimljobs.fyi/logo512.png",
     },
     jobLocation: {
       "@type": "Place",

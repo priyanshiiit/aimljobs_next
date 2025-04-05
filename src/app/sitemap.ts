@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const jobs = await getJobs();
 
   // Base URL for the site
-  const baseUrl = "https://aimljobs.fyi";
+  const baseUrl = "https://www.aimljobs.fyi";
 
   // Static routes
   const staticRoutes = [
