@@ -1,123 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { formatDistanceToNow } from "date-fns";
-import { fetchUnlistedJobs, updateJobSchedule, deleteJob } from "@/lib/api";
-import { FiArrowUpRight, FiCalendar, FiCheck, FiX } from "react-icons/fi";
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import { FiArrowUpRight, FiCalendar, FiCheck, FiX } from "react-icons/fi";
+import { FaRegEdit } from "react-icons/fa";
+import { Job } from "@/types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Job } from "@/types";
-import { FaRegEdit } from "react-icons/fa";
 
-interface ScheduledJobsProps {
-  refreshTrigger: number;
-}
-
-export function ScheduledJobs({ refreshTrigger }: ScheduledJobsProps) {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchUnlistedJobs();
-        setJobs(data);
-      } catch (error) {
-        console.error("Error fetching unlisted jobs:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchJobs();
-  }, [refreshTrigger]);
-
-  const handleScheduleUpdate = async (jobId: string, newDate: Date) => {
-    try {
-      await updateJobSchedule(jobId, newDate.toISOString());
-      // Refresh the jobs list
-      const data = await fetchUnlistedJobs();
-      setJobs(data);
-    } catch (error) {
-      console.error("Error updating job schedule:", error);
-    }
-  };
-
-  const handleDeleteJob = async (jobId: string) => {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-
-    try {
-      await deleteJob(jobId);
-      // Refresh the jobs list
-      const data = await fetchUnlistedJobs();
-      setJobs(data);
-    } catch (error) {
-      console.error("Error deleting job:", error);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
-      </div>
-    );
-  }
-
-  const now = new Date();
-
-  const unscheduledJobs = jobs.filter((job) => !job.Timestamp);
-  const scheduledJobs = jobs.filter((job) => {
-    if (!job.Timestamp) return false;
-    const jobDate = new Date(job.Timestamp);
-    return jobDate > now;
-  });
-
-  return (
-    <div className="space-y-8">
-      {/* Scheduled Jobs Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">Scheduled Jobs</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {scheduledJobs.map((job) => (
-            <JobCard
-              key={job._id}
-              job={job}
-              onSchedule={handleScheduleUpdate}
-              onDelete={handleDeleteJob}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Unscheduled Jobs Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900">Unscheduled Jobs</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {unscheduledJobs.map((job) => (
-            <JobCard
-              key={job._id}
-              job={job}
-              onSchedule={handleScheduleUpdate}
-              onDelete={handleDeleteJob}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-interface JobCardProps {
+interface AdminJobCardProps {
   job: Job;
   onSchedule: (jobId: string, date: Date) => void;
   onDelete: (jobId: string) => void;
 }
 
-function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
+export function AdminJobCard({ job, onSchedule, onDelete }: AdminJobCardProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     job.Timestamp ? new Date(job.Timestamp) : null
   );
@@ -155,6 +54,8 @@ function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
             <Link
               href={job.CompanyWebsite}
               className="text-gray-600 hover:text-gray-800"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {job.CompanyName}
             </Link>
@@ -165,14 +66,16 @@ function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
               className="text-blue-600 hover:text-blue-800"
               title="Edit job"
               target="_blank"
+              rel="noopener noreferrer"
             >
               <FaRegEdit size={20} />
             </Link>
             <Link
               href={job.ApplicationURLrecommendedOrEmailAddress2}
-              className="text-purple hover:text-purple-700"
+              className="text-purple hover:text-purple-dark"
               target="_blank"
               rel="noopener noreferrer"
+              title="Visit application URL"
             >
               <FiArrowUpRight size={20} />
             </Link>
@@ -183,10 +86,14 @@ function JobCard({ job, onSchedule, onDelete }: JobCardProps) {
           {job.Timestamp && (
             <div className="flex items-center text-sm text-gray-500">
               <span className="inline-block bg-purple-100 text-purple px-2 py-1 rounded-full text-xs">
-                Scheduled for:{" "}
-                {formatDistanceToNow(new Date(job.Timestamp), {
-                  addSuffix: true,
-                })}
+                {new Date(job.Timestamp) > new Date()
+                  ? `Scheduled for: ${formatDistanceToNow(
+                      new Date(job.Timestamp),
+                      { addSuffix: true }
+                    )}`
+                  : `Published: ${formatDistanceToNow(new Date(job.Timestamp), {
+                      addSuffix: true,
+                    })}`}
               </span>
             </div>
           )}

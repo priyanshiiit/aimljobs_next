@@ -150,3 +150,68 @@ export async function subscribeToNewsletter(email: string) {
     throw error;
   }
 }
+
+/**
+ * Fetch currently published jobs (live jobs)
+ * @returns A promise that resolves to an array of live jobs
+ */
+export async function fetchLiveJobs(): Promise<Job[]> {
+  try {
+    // The default /v1/jobs endpoint returns jobs from the last 31 days, which are the live jobs
+    const response = await fetch(`${API_BASE_URL}/v1/jobs`, {
+      next: {
+        revalidate: 20, // Cache for 20 seconds
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch live jobs");
+    }
+
+    const jobs = await response.json();
+    return jobs;
+  } catch (error) {
+    console.error("Error fetching live jobs:", error);
+    return [];
+  }
+}
+
+/**
+ * Fetch old jobs (published more than 31 days ago but less than 60 days ago)
+ * @returns A promise that resolves to an array of old jobs
+ */
+export async function fetchOldJobs(): Promise<Job[]> {
+  try {
+    // Calculate dates for 31 and 60 days ago
+    const now = new Date();
+    const thirtyOneDaysAgo = new Date(now);
+    thirtyOneDaysAgo.setDate(now.getDate() - 31);
+
+    const sixtyDaysAgo = new Date(now);
+    sixtyDaysAgo.setDate(now.getDate() - 60);
+
+    // Format dates as ISO strings
+    const from = sixtyDaysAgo.toISOString();
+    const to = thirtyOneDaysAgo.toISOString();
+
+    // Use the jobs endpoint with date parameters to filter old jobs
+    const response = await fetch(
+      `${API_BASE_URL}/v1/jobs?from=${from}&to=${to}`,
+      {
+        next: {
+          revalidate: 60, // Cache for 60 seconds
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch old jobs");
+    }
+
+    const jobs = await response.json();
+    return jobs;
+  } catch (error) {
+    console.error("Error fetching old jobs:", error);
+    return [];
+  }
+}
