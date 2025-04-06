@@ -25,7 +25,7 @@ export function OldJobsTab() {
     fetchJobs();
   }, []);
 
-  const handleScheduleUpdate = async (jobId: string, newDate: Date) => {
+  const handleScheduleUpdate = async () => {
     // For old jobs, if they are rescheduled, they'll move to scheduled jobs
     // Refresh the list after update
     try {
