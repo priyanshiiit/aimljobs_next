@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchLiveJobs, deleteJob } from "@/lib/api";
+import { fetchLiveJobs, deleteJob, updateJobSchedule } from "@/lib/api";
 import { Job } from "@/types";
 import { AdminJobCard } from "./AdminJobCard";
 
@@ -25,10 +25,11 @@ export function LiveJobsTab() {
     fetchJobs();
   }, []);
 
-  const handleScheduleUpdate = async () => {
+  const handleScheduleUpdate = async (jobId: string, newDate: Date) => {
     // For live jobs, if they are rescheduled, they'll move to scheduled jobs
     // Refresh the list after update
     try {
+      await updateJobSchedule(jobId, newDate.toISOString());
       // Refresh the jobs list
       const data = await fetchLiveJobs();
       setJobs(data);
