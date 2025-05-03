@@ -24,10 +24,20 @@ export const Header = () => {
                 Jobs
               </Link>
             </nav>
+            <nav className="sm:flex items-center text-lg">
+              <Link
+                className="text-white font-medium hover:opacity-75 transition-opacity"
+                href="https://aimljobs-news.beehiiv.com/"
+                target="_blank"
+              >
+                Newsletter
+              </Link>
+            </nav>
             <div className="block text-center">
               <Link
                 className="block items-center text-md text-base text-white font-medium bg-white bg-opacity-20 hover:bg-opacity-30 border border-transparent pb-1.5 pl-2 pr-2 pt-1 rounded-md transition-colors"
                 href="/job/new"
+                target="_blank"
               >
                 Post job
               </Link>
